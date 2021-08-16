@@ -1,11 +1,15 @@
 package COVID19.WhenWeMaskOff.service;
 
+import COVID19.WhenWeMaskOff.domain.ApiData;
 import COVID19.WhenWeMaskOff.domain.Member;
 import COVID19.WhenWeMaskOff.repository.MemberRepository;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.print.DocFlavor;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,12 +26,6 @@ public class MaskoffService {
         this.memberRepository=memberRepository;
     }
 
-    public String checkMyRegionCRONA19(String id)  {
-        Member member=memberRepository.findById(id).get();
-
-        String result=callAPi(member.getRegion());
-        return result;
-    }
     public String callAPi(String region)  {
         StringBuilder sb= new StringBuilder();
          try{
@@ -66,6 +64,26 @@ public class MaskoffService {
         urlStr+="&"+URLEncoder.encode("cond[baseDate::EQ]","UTF-8")+"="+URLEncoder.encode(date,"UTF-8");
         return urlStr;
     }
+    public ApiData getApiData(String id) {
+        Member member=memberRepository.findById(id).get();
+        String result=callAPi(member.getRegion());
+        ApiData dataArray=new ApiData();
+        try {
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject=(JSONObject) jsonParser.parse(result);
+            JSONArray apiData = (JSONArray) jsonObject.get("data");
+            JSONObject jobj = (JSONObject) apiData.get(0);
+            dataArray.setFirstCnt(Integer.parseInt((jobj.get("firstCnt")).toString()));
+            dataArray.setSecondCnt(Integer.parseInt((jobj.get("secondCnt")).toString()));
+            dataArray.setTotalFirstCnt(Integer.parseInt((jobj.get("totalFirstCnt")).toString()));
+            dataArray.setTotalSecondCnt(Integer.parseInt((jobj.get("totalSecondCnt")).toString()));
+            dataArray.setSido((jobj.get("sido")).toString());
+            return dataArray;
+        }catch (ParseException p){
+            System.out.println("json으로 변경하는 과정에서 오류가생겼습니다"+p);
+            return dataArray;
+        }
 
+    }
 
 }

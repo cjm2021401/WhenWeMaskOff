@@ -19,10 +19,12 @@ public class MemberController {
     public String home(){
         return "home";
     }
+
     @GetMapping("members/new")
     public String singIn(){
         return "members/signin";
     }
+
     @PostMapping("members/new")
     public String join(Member form){
         memberService.join(form);

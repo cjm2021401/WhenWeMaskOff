@@ -1,13 +1,14 @@
 package COVID19.WhenWeMaskOff.controller;
 
+import COVID19.WhenWeMaskOff.domain.ApiData;
 import COVID19.WhenWeMaskOff.domain.Member;
 import COVID19.WhenWeMaskOff.service.MaskoffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.io.IOException;
 
 @Controller
 public class MaskoffController {
@@ -21,11 +22,15 @@ public class MaskoffController {
     public String search(){
         return "maskoff/search";
     }
+
     @PostMapping("maskoff/search")
-    public String checkCorona(Member form) {
-        String result=maskoffService.checkMyRegionCRONA19(form.getId());
-        System.out.println(result);
-        return "redirect:/";
+    public String checkCorona(Member form, Model model) {
+        ApiData result=maskoffService.getApiData(form.getId());
+
+        model.addAttribute("percent", 70);
+        System.out.println(result.getTotalSecondCnt());
+        return "maskoff/result";
     }
+
 
 }
