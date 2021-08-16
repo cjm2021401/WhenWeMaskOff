@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <form action="/members/new" method="post">
+        <div class="form-group">
+            <label for="id">id</label>
+            <input type="text" id="id" name="id" placeholder="id를 입력하세요">
+            </br>
+            </br>
+            <label for="region">지역</label>
+            <input type="text" id="region" name="region" placeholder="지역을 입력하세요">
+            </br>
+            <p>ex) 경기도, 서울특별시, 부산광역시</p>
+            </br>
+            <label for="webhook">Webhook</label>
+            <input type="text" id="webhook" name="webhook" placeholder="slack webhook을 입력하시">
+        </div>
+        <button type="submit">등록</button>
+    </form>
+</div> <!-- /container -->
+</body>
+</html>

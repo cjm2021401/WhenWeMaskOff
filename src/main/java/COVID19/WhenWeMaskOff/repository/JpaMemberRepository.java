@@ -1,6 +1,7 @@
 package COVID19.WhenWeMaskOff.repository;
 
 import COVID19.WhenWeMaskOff.domain.Member;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -9,7 +10,8 @@ import java.util.Optional;
 
 @Repository
 public class JpaMemberRepository implements MemberRepository{
-    private final EntityManager em;
+    private EntityManager em;
+    @Autowired
     public JpaMemberRepository(EntityManager em){
         this.em=em;
     }

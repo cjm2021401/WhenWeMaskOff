@@ -7,7 +7,7 @@ import javax.persistence.Id;
 public class Member {
     @Id
     private String id;
-    private String webHook;
+    private String webhook;
     private String region;
 
     public String getId() {
@@ -18,12 +18,12 @@ public class Member {
         this.id = id;
     }
 
-    public String getWebHook() {
-        return webHook;
+    public String getWebhook() {
+        return webhook;
     }
 
-    public void setWebHook(String webHook) {
-        this.webHook = webHook;
+    public void setWebhook(String webhook) {
+        this.webhook = webhook;
     }
 
     public String getRegion() {

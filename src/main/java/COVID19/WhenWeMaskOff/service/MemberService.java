@@ -1,13 +1,17 @@
 package COVID19.WhenWeMaskOff.service;
 
 import COVID19.WhenWeMaskOff.domain.Member;
+import COVID19.WhenWeMaskOff.repository.JpaMemberRepository;
 import COVID19.WhenWeMaskOff.repository.MemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class MemberService {
     private final MemberRepository memberRepository;
-
+    @Autowired
     public MemberService(MemberRepository memberRepository){
         this.memberRepository=memberRepository;
     }
@@ -16,6 +20,7 @@ public class MemberService {
      *회원가입
      */
     public String join(Member member){
+        check(member);
         memberRepository.save(member);
         return member.getId();
     }
