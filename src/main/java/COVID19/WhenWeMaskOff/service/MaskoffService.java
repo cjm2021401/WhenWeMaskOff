@@ -3,6 +3,7 @@ package COVID19.WhenWeMaskOff.service;
 import COVID19.WhenWeMaskOff.domain.ApiData;
 import COVID19.WhenWeMaskOff.domain.Member;
 import COVID19.WhenWeMaskOff.repository.MemberRepository;
+import org.hamcrest.beans.HasProperty;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Calendar;
+import java.util.HashMap;
 
 @Service
 public class MaskoffService {
@@ -30,7 +32,6 @@ public class MaskoffService {
         StringBuilder sb= new StringBuilder();
          try{
         URL url =new URL(getNow(region));
-        System.out.println(url);
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
         httpURLConnection.setRequestMethod("GET");
         BufferedReader br=new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), "UTF-8"));
@@ -84,6 +85,21 @@ public class MaskoffService {
             return dataArray;
         }
 
+    }
+    public HashMap<String, Integer> calPercent(String sido, int secondCnt, int totalSecondCnt){
+        HashMap<String,Integer> result= new HashMap<>();
+        int total=getTotal(sido);
+        result.put("percent", (int)(((double)totalSecondCnt/(double)total)*100));
+        result.put("restVaccine", (int)((double)total*0.7)-totalSecondCnt);
+        result.put("restDay", ((int)((double)total*0.7)-totalSecondCnt)/secondCnt);
+        return result;
+    }
+    public int getTotal(String sido){
+        if(sido.equals("경기도")) return 13410000;
+        else if(sido.equals("서울특별시")) return 9776000;
+        else if(sido.equals("부산광역시")) return 3429000;
+        else if(sido.equals("대구광역시")) return 2465000;
+        else return 0;
     }
 
 }

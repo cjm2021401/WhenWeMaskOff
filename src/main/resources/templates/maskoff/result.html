@@ -6,6 +6,12 @@
 </head>
 <body>
 <progress th:value="${percent}" max="100"></progress>
-<p th:text="${percent}"></p>
+<p th:text="'2차 접종 접종률 '+${percent}+'퍼센트'"></p>
+<p th:text="'2차 접종 인원 '+${totalSecondCnt}+'명'"></p>
+<p th:text="'전일 2차 접종 인원 ' +${secondCnt}+'일'"></p>
+<p th:text="'마스크를 벗는 날까지 까지 남은날 '+${restDay}+'일'"></p>
+<p>(마스크를 벗는 날은 2차 접중률 70퍼 센트를 기준으로)</p>
+<p>(매일 전일과 같이 맞았을 경우를 계산)</p>
+
 </body>
 </html>

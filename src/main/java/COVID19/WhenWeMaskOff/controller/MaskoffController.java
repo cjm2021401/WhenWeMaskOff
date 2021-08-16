@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.HashMap;
+
 
 @Controller
 public class MaskoffController {
@@ -26,8 +28,12 @@ public class MaskoffController {
     @PostMapping("maskoff/search")
     public String checkCorona(Member form, Model model) {
         ApiData result=maskoffService.getApiData(form.getId());
-
-        model.addAttribute("percent", 70);
+        HashMap<String, Integer> percent=maskoffService.calPercent(result.getSido(), result.getSecondCnt(), result.getTotalSecondCnt());
+        model.addAttribute("secondCnt",result.getSecondCnt());
+        model.addAttribute("totalSecondCnt", result.getTotalSecondCnt());
+        model.addAttribute("percent", percent.get("percent"));
+        model.addAttribute("restVaccine", percent.get("restVaccine"));
+        model.addAttribute("restDay", percent.get("restDay"));
         System.out.println(result.getTotalSecondCnt());
         return "maskoff/result";
     }
