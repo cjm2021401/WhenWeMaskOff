@@ -31,7 +31,7 @@ public class MaskoffController {
         HashMap<String, Integer> percent=maskoffService.calPercent(result.getSido(), result.getSecondCnt(), result.getTotalSecondCnt());
         model.addAttribute("secondCnt",result.getSecondCnt());
         model.addAttribute("totalSecondCnt", result.getTotalSecondCnt());
-        model.addAttribute("percent", percent.get("percent"));
+        model.addAttribute("percent", percent.get("percent_1"));
         model.addAttribute("restVaccine", percent.get("restVaccine"));
         model.addAttribute("restDay", percent.get("restDay"));
         System.out.println(result.getTotalSecondCnt());

@@ -28,10 +28,15 @@ public class MaskoffService {
         this.memberRepository=memberRepository;
     }
 
+    /**
+     * call openAPI about COVID-19
+     * @param region (지역)
+     * @return  json data
+     */
     public String callAPi(String region)  {
         StringBuilder sb= new StringBuilder();
          try{
-        URL url =new URL(getNow(region));
+        URL url =new URL(ApiUrl(region));
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
         httpURLConnection.setRequestMethod("GET");
         BufferedReader br=new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), "UTF-8"));
@@ -48,7 +53,14 @@ public class MaskoffService {
 
 
     }
-    public String getNow(String region) throws IOException{
+
+    /**
+     * get open api url
+     * @param region
+     * @return url
+     * @throws IOException url encode fail
+     */
+    public String ApiUrl(String region) throws IOException{
         Calendar cal = Calendar.getInstance();
         String year_s = Integer.toString(cal.get(Calendar.YEAR));
         int month = cal.get(Calendar.MONTH) + 1;
@@ -65,6 +77,12 @@ public class MaskoffService {
         urlStr+="&"+URLEncoder.encode("cond[baseDate::EQ]","UTF-8")+"="+URLEncoder.encode(date,"UTF-8");
         return urlStr;
     }
+
+    /**
+     * get data from json
+     * @param id
+     * @return ApiData(first, Second Count) + (first , second Total Count) + region
+     */
     public ApiData getApiData(String id) {
         Member member=memberRepository.findById(id).get();
         String result=callAPi(member.getRegion());
@@ -86,19 +104,48 @@ public class MaskoffService {
         }
 
     }
+
+    /**
+     * caculate wated data from Api data
+     * @param sido
+     * @param secondCnt
+     * @param totalSecondCnt
+     * @return 1,2차 접종률, 2차 접종률 70퍼센트까지 남은 백신과 예상 날짜
+     */
     public HashMap<String, Integer> calPercent(String sido, int secondCnt, int totalSecondCnt){
         HashMap<String,Integer> result= new HashMap<>();
         int total=getTotal(sido);
-        result.put("percent", (int)(((double)totalSecondCnt/(double)total)*100));
+        result.put("percent_1", (int)(((double)totalSecondCnt/(double)total)*100));
+        result.put("percent_2", (int)(((double)totalSecondCnt/(double)total)*100));
         result.put("restVaccine", (int)((double)total*0.7)-totalSecondCnt);
         result.put("restDay", ((int)((double)total*0.7)-totalSecondCnt)/secondCnt);
         return result;
     }
+
+    /**
+     * get Population
+     * @param sido
+     * @return Population
+     */
     public int getTotal(String sido){
         if(sido.equals("경기도")) return 13410000;
         else if(sido.equals("서울특별시")) return 9776000;
         else if(sido.equals("부산광역시")) return 3429000;
         else if(sido.equals("대구광역시")) return 2465000;
+        else if(sido.equals("광주광역시 ")) return 1500000;
+        else if(sido.equals("인천광역시")) return 2923000;
+        else if(sido.equals("대전광역시")) return 1531000;
+        else if(sido.equals("울산광역시")) return 1166000;
+        else if(sido.equals("세종특별자치시")) return 275600;
+        else if(sido.equals("강원도")) return 1565000;
+        else if(sido.equals("충청북도")) return 1579000;
+        else if(sido.equals("충청남도")) return 2060000;
+        else if(sido.equals("전라북도")) return 1870000;
+        else if(sido.equals("전라남도")) return 1902000;
+        else if(sido.equals("경상북도")) return 2700000;
+        else if(sido.equals("경상남도")) return 3448000;
+        else if(sido.equals("제주특별자치도")) return 695500;
+        else if(sido.equals("전국")) return 51710000;
         else return 0;
     }
 
