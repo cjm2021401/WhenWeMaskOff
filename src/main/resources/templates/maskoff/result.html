@@ -5,8 +5,11 @@
     <title>WhenWeMaskOff</title>
 </head>
 <body>
-<progress th:value="${percent}" max="100"></progress>
-<p th:text="'2차 접종 접종률 '+${percent}+'퍼센트'"></p>
+<p th:text="'1차 접종 접종률 '+${percent1}+'퍼센트'"></p>
+<progress th:value="${percent_1}" max="100"></progress>
+</br>
+<p th:text="'2차 접종 접종률 '+${percent2}+'퍼센트'"></p>
+<progress th:value="${percent_2}" max="100"></progress>
 <p th:text="'2차 접종 인원 '+${totalSecondCnt}+'명'"></p>
 <p th:text="'전일 2차 접종 인원 ' +${secondCnt}+'일'"></p>
 <p th:text="'마스크를 벗는 날까지 까지 남은날 '+${restDay}+'일'"></p>

@@ -107,18 +107,20 @@ public class MaskoffService {
 
     /**
      * caculate wated data from Api data
-     * @param sido
-     * @param secondCnt
-     * @param totalSecondCnt
      * @return 1,2차 접종률, 2차 접종률 70퍼센트까지 남은 백신과 예상 날짜
      */
-    public HashMap<String, Integer> calPercent(String sido, int secondCnt, int totalSecondCnt){
+    public HashMap<String, Integer> calPercent(String id){
+        ApiData apiData=getApiData(id);
         HashMap<String,Integer> result= new HashMap<>();
-        int total=getTotal(sido);
-        result.put("percent_1", (int)(((double)totalSecondCnt/(double)total)*100));
-        result.put("percent_2", (int)(((double)totalSecondCnt/(double)total)*100));
-        result.put("restVaccine", (int)((double)total*0.7)-totalSecondCnt);
-        result.put("restDay", ((int)((double)total*0.7)-totalSecondCnt)/secondCnt);
+        int total=getTotal(apiData.getSido());
+        result.put("firstCnt", apiData.getFirstCnt());
+        result.put("secondCnt", apiData.getSecondCnt());
+        result.put("totalFirstCnt", apiData.getFirstCnt());
+        result.put("totalSecondCnt", apiData.getTotalSecondCnt());
+        result.put("percent_1", (int)(((double)apiData.getTotalFirstCnt()/(double)total)*100));
+        result.put("percent_2", (int)(((double)apiData.getTotalSecondCnt()/(double)total)*100));
+        result.put("restVaccine", (int)((double)total*0.7)-apiData.getTotalSecondCnt());
+        result.put("restDay", ((int)((double)total*0.7)-apiData.getTotalSecondCnt())/apiData.getSecondCnt());
         return result;
     }
 

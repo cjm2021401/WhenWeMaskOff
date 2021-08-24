@@ -1,6 +1,5 @@
 package COVID19.WhenWeMaskOff.controller;
 
-import COVID19.WhenWeMaskOff.domain.ApiData;
 import COVID19.WhenWeMaskOff.domain.Member;
 import COVID19.WhenWeMaskOff.service.MaskoffService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +26,9 @@ public class MaskoffController {
 
     @PostMapping("maskoff/search")
     public String checkCorona(Member form, Model model) {
-        ApiData result=maskoffService.getApiData(form.getId());
-        HashMap<String, Integer> percent=maskoffService.calPercent(result.getSido(), result.getSecondCnt(), result.getTotalSecondCnt());
-        model.addAttribute("secondCnt",result.getSecondCnt());
-        model.addAttribute("totalSecondCnt", result.getTotalSecondCnt());
-        model.addAttribute("percent", percent.get("percent_1"));
-        model.addAttribute("restVaccine", percent.get("restVaccine"));
-        model.addAttribute("restDay", percent.get("restDay"));
-        System.out.println(result.getTotalSecondCnt());
+        HashMap<String, Integer> percent=maskoffService.calPercent(form.getId());
+        model.addAllAttributes(percent);
+        model.addAttribute("region", form.getRegion());
         return "maskoff/result";
     }
 
